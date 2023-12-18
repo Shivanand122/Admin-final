@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="~/Admin.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+</head>
+<body>
+    <header>
+
+        @{
+            var actionName = ViewContext.RouteData.Values["action"]?.ToString();
+            var controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
+        }
+
+        @if (actionName == "Index" && controllerName == "AdminM")
+        {
+            <nav class="navbar navbar-expand-lg bg-light  " data-bs-theme="light">
+                <div class="container-fluid">
+
+                    <a class="navbar-brand text-dark" href="Index">Admin page </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarColor03">
+                        <ul class="navbar-nav me-auto">
+                        </ul>
+                        @* <form id="searchForm" asp-controller="AdminM" asp-action="SearchFeatures" method="post">
+                    <input type="text" id="searchInput" name="searchTerm" placeholder="Enter search term" />
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit" id="searchBtn">Search</button>
+                    </form> *@
+                        <ul>
+                            <form id="logoutForm">
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-block w-100 m-1" onclick="confirmLogout()">Logout</button>
+                            </form>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </nav>
+        }
+        
+      
+
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @* <partial name="_Notification"/> *@
+            @RenderBody() <!-- This is where the content of your specific view will be rendered -->
+        </main>
+    </div>
+
+   
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Logout Confirmation',
+                text: 'Are you sure you want to logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, logout!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If user clicks "Yes, logout!", submit the form
+                    // document.getElementById('logoutForm').submit();
+                    window.location.href = 'https://green-sky-03dfcc510.4.azurestaticapps.net/';
+                }
+            });
+        }
+
+    </script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+
+</html>

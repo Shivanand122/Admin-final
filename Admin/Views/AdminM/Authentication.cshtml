@@ -1,0 +1,424 @@
+﻿
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+    }
+
+    
+
+    .login-content h2 {
+        margin: 15px 0;
+        color: #333;
+        text-transform: uppercase;
+        font-size: 2.9rem;
+    }
+
+    .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-content {
+        text-align: center;
+        width: 400px; /* Adjust the width as needed */
+    }
+
+        .login-content img {
+            height: 100px;
+        }
+
+        .login-content h2 {
+            margin: 15px 0;
+            color: #333;
+            text-transform: uppercase;
+            font-size: 2.9rem;
+        }
+
+    .input-div {
+        position: relative;
+        margin: 25px 0;
+        padding: 5px 0;
+        border-bottom: 2px solid #d9d9d9;
+    }
+
+        .input-div > div {
+            display: flex;
+            align-items: center;
+        }
+
+            .input-div > div > h5 {
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #999;
+                font-size: 18px;
+                transition: .3s;
+            }
+
+        .input-div:before,
+        .input-div:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: #38d39f;
+            transition: .4s;
+        }
+
+        .input-div:before {
+            right: 0%;
+        }
+
+        .input-div:after {
+            left: 0%;
+        }
+
+        .input-div > div.focus:before,
+        .input-div.focus:after {
+            width: 100%;
+        }
+
+        .input-div.focus > div > h5 {
+            top: -5px;
+            font-size: 15px;
+        }
+
+        .input-div.focus > .i > i {
+            color: #38d39f;
+        }
+
+    .i {
+        color: #38d39f;
+    }
+
+    .input-div > div > input {
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+        background: none;
+        padding: 0.5rem 0.7rem;
+        font-size: 1.2rem;
+        color: #555;
+        font-family: 'poppins', sans-serif;
+        margin-left: 10px;
+    }
+
+    a {
+        display: block;
+        text-align: right;
+        text-decoration: none;
+        color: #999;
+        font-size: 0.9rem;
+        transition: .3s;
+    }
+
+        a:hover {
+            color: #38d39f;
+        }
+
+    .btn {
+        display: block;
+        width: 100%;
+        height: 50px;
+        border-radius: 25px;
+        outline: none;
+        border: none;
+        background-image: linear-gradient(to right, #32be8f, #38d39f, #32be8f);
+        background-size: 200%;
+        font-size: 1.2rem;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+        text-transform: uppercase;
+        margin: 1rem 0;
+        cursor: pointer;
+        transition: .5s;
+        justify-content: center;
+        align-items: center;
+        display: inline-flex;
+    }
+
+    .input-div > div > i {
+        margin-right: 10px;
+        vertical-align: middle;
+        color: #999;
+        font-size: 18px;
+        transition: .3s;
+    }
+
+    .card-body .form-group #txtotp.form-control {
+        padding: 0.5rem; /* Adjust the padding value as needed */
+     /*    border-radius: 50px; */ /* Adjust the border-radius value as needed */
+      /*   border: 2px solid black; */
+    }
+
+    .btn:hover {
+        background-position: right;
+    }
+
+    .card-footer{
+        margin:auto;
+        width:60%;
+    }
+</style>
+
+<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+
+<div class="container">
+    <div class="login-content">
+@*         <form onclick="return validate()">
+ *@
+            <!-- Existing login form code here -->
+            <!-- New verification code section -->
+            <div class="auth">
+                <h2 class="title">VERIFY OTP</h2>
+
+            </div>
+
+            <p>Verification code has been sent to the registered Email</p>
+
+           
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>OTP</label>
+                                <input type="text" class="form-control" id="txtotp" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          
+
+            <br />
+
+            <div class="card-footer">
+                <a onclick="ProceedVerify()" class="btn btn-primary">Verify</a>
+            </div>
+
+@*         </form>
+ *@    </div>
+</div>
+
+@*
+<div class="auth"><h1>AUTHENTICATION</h1></div>
+
+<h5>Verification code has been sent to the registered Email</h5>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-lg-12">
+
+                <div class="form-group">
+
+                    <label>OTP</label>
+
+                    <input type="text" class="form-control" id="txtotp" style="border:1px solid black" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<br />
+
+<div class="card-footer">
+
+    <a onclick="ProceedVerify()" class="btn btn-primary">Verify</a>
+
+</div> *@
+
+<p class="succ-msg" id="succmsg" style="color:red"></p>
+
+<!-- Add this div for displaying the warning message -->
+
+<div class="warning-msg" id="warning-msg"></div>
+
+@* <script src="/js/CaptchaJavaScript.js"></script>
+ *@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    var js = jQuery.noConflict(true);
+
+
+    function parseJwt(token) {
+        //     // ... (your existing code)
+        var base64Url = token.split(".")[1];
+        var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        var jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split("")
+                .map(function (c) {
+                    return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join("")
+        );
+
+        return JSON.parse(jsonPayload);
+    }
+
+    var attemptCount=0;
+    // Revised ProceedVerify function
+
+    function ProceedVerify() {
+
+        var isproceed = true;
+
+        var urlParams = new URLSearchParams(window.location.search);
+
+        var user = urlParams.get('username');
+
+        var _otp = $('#txtotp');
+
+        var otp = _otp.val();
+
+        if (otp == null || otp.trim() == '') {
+
+            _otp.css('border-color', 'red');
+
+            isproceed = false;
+
+        } else {
+
+            _otp.css('border-color', '#ccc');
+
+        }
+
+        if (isproceed) {
+
+            var succmsg = document.getElementById('succmsg');
+
+            var _obj = {
+
+                username: user,
+
+                code: otp
+
+            };
+
+            fetch('https://usermanagemenfeaturemarketplaceapi.azurewebsites.net/api/Authentication/login-2FA', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(_obj)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    let decodedtoken = parseJwt(data.token);
+                    const {
+                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": name,
+                        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": role,
+                    } = decodedtoken;
+                    //console.log(decodedtoken);
+                    const userObject = {
+                        name,
+                        role,
+                    };
+
+                    sessionStorage.setItem('UserObj', JSON.stringify(userObject));
+                    const storedUserObject = JSON.parse(sessionStorage.getItem('UserObj'));
+
+
+
+                    if (data.token && userObject.role === "Admin") {
+
+                        showSuccessAlert('Login successful! Redirecting to the Dashboard...');
+                        setTimeout(function () {
+                            window.location.href = '/AdminM/Index?username=' + encodeURIComponent(name);
+                        }, 500); // Redirect after 2 seconds (adjust the timing as needed)
+
+                        
+
+
+                    }else {
+
+                        
+                        console.log("error");
+                    }
+
+
+                })
+                .catch(error => {
+
+                        
+                        attemptCount++;
+                        if (attemptCount < 3) {
+                            showErrorAlert1('Invalid Verification Code. You have ' + (3 - attemptCount) + ' attempts remaining.');
+                        } else {
+
+                            showErrorAlert('Invalid Verification Code. Please try logging in again.');
+                        }
+                        return false;
+                    
+                })
+        }
+
+    }
+
+
+
+    
+    
+    function showSuccessAlert(message) {
+        Swal.fire({
+            title: 'Success',
+            text: message,
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    }
+
+    function showErrorAlert1(message) {
+        Swal.fire({
+            title: 'Error',
+            text: message,
+            icon: 'error',
+            timer: 3000
+        });
+    }
+
+    function showErrorAlert(message) {
+        Swal.fire({
+            title: 'Error',
+            text: message,
+            icon: 'error',
+            timer: 3000
+        }).then(() => {
+            // After the timer finishes, reload the page
+            window.location.href = '/AdminM/Log';
+        });
+    }
+
+</script>

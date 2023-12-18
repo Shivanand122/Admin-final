@@ -1,0 +1,431 @@
+﻿@model IEnumerable<AdminDAL.Entities2.Feature>
+@addTagHelper *, Microsoft.FeatureManagement.AspNetCore
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<head>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+
+    @* <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    *@
+    <!-- Font Awesome CSS (assuming you are using Font Awesome for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+
+    <!-- jQuery (adjust the version if needed) -->  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Bootstrap JS (adjust the version if needed) -->
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- DataTables CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- Buttons CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+
+</head>
+
+
+
+
+
+
+<script src="~/Admin.js"></script>
+
+
+<style>
+
+    .element-with-scroll {
+        overflow-y: scroll;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+
+        .element-with-scroll::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+
+
+
+    .feature-row {
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+
+
+    .features-section {
+        flex: 10; /* 80% width */
+        padding: 20px;
+        width: 100%;
+        height: 1000px; /* Sample height */
+        transition: transform 0.5s ease; /* Adding a transition effect */
+        /* Add vertical scrollbar if needed */
+    }
+
+    .bar-section {
+        transition: transform 0.5s ease;
+    }
+
+    .bar-data {
+        position: absolute;
+        right: 100px;
+        top: 100px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .bar-data-border {
+        width: 200px;
+        height: 100px;
+        margin: auto;
+        right: 20px;
+    }
+
+    #BarChart {
+        height: 300px;
+        width: 650px;
+        position: absolute;
+        left: 150px;
+        top: 20px;
+    }
+
+
+    .comment-box {
+        border-top: 1px solid #ccc;
+        width: 205px; /* Adjust width as needed */
+        margin-top: -1px; /* Adjust margin as needed to align properly with preview-pane */
+        float: right;
+    }
+
+    .feature-details-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        width: 400px; /* Adjust the width as needed */
+        flex-direction: row;
+        align-items: center;
+    }
+
+
+    @@media (max-width: 576px) {
+        .remove-left-padding {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .bar-data {
+            height: 20px;
+            position: absolute;
+            right: 0px;
+            top: 100px;
+        }
+
+        #BarChart {
+            height: 300px;
+            width: 650px;
+            position: absolute;
+            left: 150px;
+            top: 20px;
+        }
+
+        #featuresTable {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .table-responsive {
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+            .table-responsive table {
+                margin-bottom: 0;
+            }
+
+                .table-responsive table thead th,
+                .table-responsive table tbody td {
+                    padding: 8px;
+                    font-size: 12px;
+                }
+
+        .card-body {
+            /* padding: 0;
+                             */
+
+            position: absolute;
+            top: 200px;
+        }
+
+        .search-container {
+            margin-bottom: 10px;
+        }
+
+        .search-bar {
+            margin-bottom: 10px;
+        }
+
+        #externalPrintButton {
+            display: none !important;
+        }
+    }
+
+
+    .preview-pane {
+        /* Your styles for the preview pane */
+        position: fixed;
+        top: 50px; /* Adjust as needed */
+        right: 10px; /* Adjust as needed */
+        width: 230px; /* Adjust width as needed */
+        height: 71%; /* Adjust height as needed */
+        border: 1px solid #ccc;
+        background-color: #f8f9fa;
+        padding: 10px;
+        overflow-y: auto; /* Enable vertical scroll if needed */
+        display: none; /* Initially hide the preview pane */
+        overflow: hidden;
+    }
+
+
+    .details-and-comment {
+        position: fixed;
+        top: 79%;
+        left: 82.3%;
+        display: flex;
+        flex-direction: column;
+        width: 230px; /* Adjust width according to the preview pane and comment box width */
+        padding: 0; /* Reset padding */
+        margin: 0; /* Reset margin */
+        float: right;
+    }
+
+
+    .feature-row:hover {
+        background-color: #f8f9fa;
+        /* Lighter background color on hover */
+        color: #007bff; /* Change text color on hover */
+        transform: scale(1.002); /* Add a slight scale effect on hover */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow on hover */
+        transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s; /* Add smooth transition */
+    }
+
+
+    #chart-container {
+        max-width: 500px; /* Adjust the maximum width as needed for larger screens */
+        margin: auto;
+        overflow-x: auto;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: auto;
+    }
+</style>
+
+
+
+
+
+
+<input type="hidden" id="hiddenFeatureId" />
+
+<!-- Modal for displaying changes preview -->
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalLabel">Preview Changes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="previewChangesBody">
+                <!-- Preview content will be displayed here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="clearAllChangesButton">
+                    Clear All
+                </button>
+                <button type="button" class="btn btn-secondary" id="cancelUpdateButton">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary" id="confirmUpdateButton">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="split-view">
+    <div class="bar-section">
+      @*   <div class="position-relative" id="BarChart">
+            <canvas id="barChart"></canvas>
+        </div> *@
+@*         <div class="bar-data-border">
+            <div class="bar-data" style="">
+                <h3> Total Approval Status</h3>
+                <p id="totalCounts">Loading...</p>
+            </div>
+        </div> *@
+    </div>
+
+    <div class="features-section">
+
+
+        <div class="card">
+            <div class="card-header text-center">
+                <h3>Feature List</h3>
+            </div>
+
+
+            <div class="card-body">
+                <div class="container">
+                    <div id="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+
+                    <br />
+                    <div class="row pt-1">
+                        <div class="col-12 col-sm-8">
+                            <div class="input-group input-group-sm mb-3">
+                                <input type="text" class="form-control" id="externalSearchBox" placeholder="Search by any Column">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary " type="button" id="searchButton">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-2 text-center">
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-block w-100 m-1" onclick="updateAllChanges()">Update All</button>
+                        </div>
+                        <div class="col-6 col-sm-2 text-center">
+
+                            <feature name="AdminSide">
+                                <button id="externalPrintButton" class="btn btn-outline-primary btn-sm btn-block w-100 m-1">Download</button>
+                            </feature>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center remove-left-padding" id="featuresTable">
+                        <thead>
+                            <tr>
+                                <th>Entity Name</th>
+                                <th class="d-none d-sm-table-cell">Feature Id </th>
+                                <th>Feature Name</th>
+                                <th class="d-none d-sm-table-cell">Value </th>
+                                <th class="d-none d-sm-table-cell">User Name </th>
+                                <th> Approval status </th>
+                                @*   <th class="d-none d-sm-table-cell">Comment</th> *@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var obj in Model)
+                            {
+                                <tr class="feature-row" data-feature-id="@obj.FeatureId">
+                                    <td onclick="loadFeatureDetails(@obj.FeatureId)">
+                                        @if (obj.EntityName != null)
+                                        {
+                                            @obj.EntityName
+                                        }
+                                        else
+                                        {
+                                            <span>Entity Not Found</span>
+                                        }
+                                    </td>
+                                    <td class="d-none d-sm-table-cell" onclick="loadFeatureDetails(@obj.FeatureId)">
+                                        @obj.FeatureId
+                                    </td>
+                                    <td onclick="loadFeatureDetails(@obj.FeatureId)">
+                                        @obj.FeatureName
+                                    </td>
+                                    <td class="d-none d-sm-table-cell" onclick="loadFeatureDetails(@obj.FeatureId)">
+                                        @obj.Value
+                                    </td>
+                                    <td class="d-none d-sm-table-cell" onclick="loadFeatureDetails(@obj.FeatureId)">
+                                        @obj.UserName
+                                    </td>
+                                    <td width="20%" class="text-center">
+                                        @if (obj.ApprovalStatus == 2)
+                                        {
+                                            <div class="col-12 text-center">
+                                                <button type="button" class="btn btn-outline-success btn-sm m-1" data-feature-id="@obj.FeatureId" onclick="acceptFeature(@obj.FeatureId)">Accept</button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm m-1" data-feature-id="@obj.FeatureId" onclick="rejectFeature(@obj.FeatureId)">Reject</button>
+                                            </div>
+                                        }
+                                        else if (obj.ApprovalStatus == 0)
+                                        {
+                                            <span class="text-success">Approved</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">Rejected</span>
+                                        }
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="details-and-comment">
+
+        <div class="preview-pane" id="featurePreviewPane" style="display: none">
+            <!-- Feature details will be displayed here -->
+        </div>
+        <div id="commentBoxContainer" class="comment-box" style="display: none">
+            <!-- This is where the comment box will be loaded -->
+        </div>
+    </div>
+
+
+</div>
+
+

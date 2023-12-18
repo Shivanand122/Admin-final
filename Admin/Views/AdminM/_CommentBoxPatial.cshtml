@@ -1,0 +1,10 @@
+﻿@model AdminDAL.Entities2.Feature
+
+<div class='comment-box'>
+    <label for="commentTextArea_@Model.FeatureId">Comment:</label>
+<textarea id="commentTextArea_@Model.FeatureId" class="form-control"></textarea>
+
+    <button type='button' class='btn btn-primary ' data-feature-id="@Model.FeatureId" onclick="saveComment(@Model.FeatureId)">Save Comment</button>
+    <button type='button' class='btn btn-secondary' onclick="closeCommentBox()">Cancel</button>
+</div>
+
